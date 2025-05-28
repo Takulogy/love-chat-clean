@@ -14,35 +14,24 @@ const ChatUI = () => {
   };
 
   const getBotReply = async (userInput) => {
-    const res = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`
-      },
-      body: JSON.stringify({
-        model: 'gpt-3.5-turbo',
-        messages: [
-          {
-            role: 'system',
-            content: `
-あなたは「もち子」という恋愛相談に特化した小悪魔系AIキャラです。
-・口調は軽く、ちょっと毒舌で、語尾に「だよ〜♡」「うふふっ」などをつけて甘さを出します。
-・相手にツッコミや茶化しも入れつつ、元気づけることが得意。
-・10〜30代の恋愛の悩みに共感しながら、キャラになりきって返答してください。
-・絶対に「私はAIです」「言語モデルです」などとは言ってはいけません。
-            `
-          },
-          {
-            role: 'user',
-            content: userInput
-          }
-        ]
-      })
-    });
+    try {
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userInput })
+      });
 
-    const data = await res.json();
-    return data.choices[0].message.content;
+      if (!res.ok) {
+        console.error('API error:', res.status);
+        return 'うまく返答できなかったよ〜♡';
+      }
+
+      const data = await res.json();
+      return data.reply || 'うまく返答できなかったよ〜♡';
+    } catch (err) {
+      console.error('Fetch failed:', err);
+      return 'ネットワークエラーだよ〜♡';
+    }
   };
 
   const handleSend = async () => {
@@ -55,7 +44,6 @@ const ChatUI = () => {
 
     const replyText = await getBotReply(inputValue);
 
-    // 音声再生（感情に応じて）
     const voiceFile = emotionToVoice[characterEmotion];
     if (voiceFile) {
       const audio = new Audio(`/voice/${voiceFile}`);
