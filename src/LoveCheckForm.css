@@ -14,7 +14,7 @@
 
 .floating-character {
   width: 150px;
-  animation: float 3s ease-in-out infinite;
+  animation: float 3s ease-in-out infinite !important;
 }
 
 @keyframes float {
@@ -25,7 +25,7 @@
 
 .question-box {
   margin: 0 auto;
-  max-width: 500px;
+  max-width: 600px;
 }
 
 .option-grid {
@@ -43,8 +43,10 @@
   background-color: #e6f0ff;
   border: 1px solid #ccc;
   cursor: pointer;
-  min-width: 120px;
+  min-width: 100px;
   transition: background-color 0.3s ease;
+  flex: 1 0 auto; /* 横並びキープ */
+  max-width: 120px;
 }
 
 .option-button:hover {
