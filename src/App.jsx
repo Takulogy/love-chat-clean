@@ -1,15 +1,17 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import ChatUI from './ChatUI';
-import PremiumPage from './PremiumPage';
-import LoveCheckForm from './LoveCheckForm'; // ✅ 新しく追加
+import LoveCheckForm from './LoveCheckForm';   // ✅ 無料診断
+import ResultPage from './ResultPage';         // ✅ 診断結果
+import PremiumPage from './PremiumPage';       // ✅ 決済完了ページ
+import ChatUI from './ChatUI';                 // ✅ 有料Botページ
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<ChatUI />} />
+        <Route path="/" element={<LoveCheckForm />} />       {/* ✅ トップページは無料診断 */}
+        <Route path="/result" element={<ResultPage />} />
         <Route path="/premium" element={<PremiumPage />} />
-        <Route path="/diagnose" element={<LoveCheckForm />} /> {/* ✅ 新しい診断ルート */}
+        <Route path="/chat" element={<ChatUI />} />          {/* ✅ 有料Botは /chat */}
       </Routes>
     </BrowserRouter>
   );
