@@ -1,6 +1,7 @@
 .love-check-container {
   text-align: center;
-  padding: 2rem;
+  padding-top: 3rem;
+  padding-bottom: 2rem;
   background: #ffffff;
   min-height: 100vh;
 }
@@ -9,7 +10,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 4rem; /* ← 質問との間を広げる */
 }
 
 .floating-character {
@@ -33,7 +34,7 @@
   flex-wrap: wrap;
   justify-content: center;
   gap: 1rem;
-  margin-top: 1rem;
+  margin-top: 1.5rem;
 }
 
 .option-button {
@@ -44,9 +45,9 @@
   border: 1px solid #ccc;
   cursor: pointer;
   min-width: 100px;
-  transition: background-color 0.3s ease;
-  flex: 1 0 auto; /* 横並びキープ */
   max-width: 120px;
+  transition: background-color 0.3s ease;
+  flex: 1 0 auto;
 }
 
 .option-button:hover {
