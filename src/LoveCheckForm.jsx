@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './LoveCheckForm.css'; // アニメーションCSSを分離（またはインラインでも可）
+import './LoveCheckForm.css';
 
 const questions = [
   { id: 'age', text: '年齢層は？', options: ['10代', '20代', '30代', '40代'] },
@@ -34,33 +34,21 @@ const LoveCheckForm = () => {
   const q = questions[current];
 
   return (
-    <div style={{ padding: '2rem', textAlign: 'center', minHeight: '100vh', background: '#fefefe' }}>
-      <img
-        src="/character_normal.png"
-        alt="キャラクター"
-        className="floating-character"
-        style={{ width: '150px', marginBottom: '1rem' }}
-      />
-      <h2 style={{ fontSize: '20px', marginBottom: '1rem' }}>質問 {current + 1} / {questions.length}</h2>
-      <p style={{ fontSize: '18px', marginBottom: '1rem' }}>{q.text}</p>
-      <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '1rem' }}>
-        {q.options.map((opt, idx) => (
-          <button
-            key={idx}
-            onClick={() => handleSelect(opt)}
-            style={{
-              padding: '12px 24px',
-              fontSize: '16px',
-              minWidth: '140px',
-              borderRadius: '8px',
-              backgroundColor: '#e0f0ff',
-              border: '1px solid #ccc',
-              cursor: 'pointer'
-            }}
-          >
-            {opt}
-          </button>
-        ))}
+    <div className="love-check-container">
+      <div className="character-wrapper">
+        <img src="/character_normal.png" alt="キャラ" className="floating-character" />
+      </div>
+
+      <div className="question-box">
+        <h2>質問 {current + 1} / {questions.length}</h2>
+        <p>{q.text}</p>
+        <div className="option-grid">
+          {q.options.map((opt, idx) => (
+            <button key={idx} className="option-button" onClick={() => handleSelect(opt)}>
+              {opt}
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );
