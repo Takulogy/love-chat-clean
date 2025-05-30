@@ -10,7 +10,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 4rem; /* ← 質問との間を広げる */
+  margin-bottom: 0; /* スペースは question-box 側で調整 */
 }
 
 .floating-character {
@@ -26,6 +26,7 @@
 
 .question-box {
   margin: 0 auto;
+  margin-top: 100px; /* ✅ ← ここで距離を確保 */
   max-width: 600px;
 }
 
