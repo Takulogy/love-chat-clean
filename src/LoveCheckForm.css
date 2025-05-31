@@ -1,6 +1,7 @@
 .love-check-container {
+  position: relative;
   text-align: center;
-  padding-top: 40px;
+  padding-top: 180px; /* キャラ用のスペースを確保 */
   padding-bottom: 2rem;
   background: #ffffff;
   min-height: 100vh;
@@ -9,9 +10,13 @@
   align-items: center;
 }
 
-/* キャラを最上部＆中央寄せに配置 */
+/* キャラを最上部中央に固定 */
 .character-wrapper {
-  margin-bottom: 80px; /* キャラと質問の余白 */
+  position: absolute;
+  top: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
 }
 
 .floating-character {
