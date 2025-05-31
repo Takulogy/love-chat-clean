@@ -1,22 +1,17 @@
 .love-check-container {
-  position: relative;
   text-align: center;
-  padding-top: 180px; /* キャラ用のスペースを確保 */
+  padding-top: 40px;
   padding-bottom: 2rem;
   background: #ffffff;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  min-height: auto; /* ← 高さを画面に固定せず、自然に流す */
+  display: block;   /* ← Flexによる分散配置をやめる */
 }
 
-/* キャラを最上部中央に固定 */
+/* キャラを上部中央に配置 */
 .character-wrapper {
-  position: absolute;
-  top: 40px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 1;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 24px; /* ← 必要最低限の余白だけ残す */
 }
 
 .floating-character {
@@ -30,8 +25,10 @@
   100% { transform: translateY(0); }
 }
 
+/* 質問＋選択肢の領域 */
 .question-box {
   max-width: 600px;
+  margin: 0 auto;
 }
 
 .option-grid {
