@@ -2,6 +2,7 @@ import React from 'react';
 import { useLocation } from 'react-router-dom';
 import { loadStripe } from '@stripe/stripe-js';
 
+// Stripe公開鍵（.envにVITE_STRIPE_PUBLIC_KEYを設定すること！）
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
 const ResultPage = () => {
@@ -16,7 +17,7 @@ const ResultPage = () => {
   const topMatches = [
     `${answers.type} な人`,
     `${answers.personality} な人`,
-    `${answers.value} を大事にする人`
+    `${answers.value ?? "愛情"} を大事にする人` // undefined対策で ?? を使用
   ];
 
   const handleCheckout = async () => {
@@ -25,6 +26,7 @@ const ResultPage = () => {
         method: 'POST',
       });
       const data = await res.json();
+      console.log("StripeセッションID:", data.id);
 
       const stripe = await stripePromise;
       const result = await stripe.redirectToCheckout({
