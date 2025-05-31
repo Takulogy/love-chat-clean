@@ -1,5 +1,8 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
+import { loadStripe } from '@stripe/stripe-js';
+
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
 const ResultPage = () => {
   const location = useLocation();
@@ -16,7 +19,6 @@ const ResultPage = () => {
     `${answers.value} を大事にする人`
   ];
 
-  // Stripe Checkout 呼び出し
   const handleCheckout = async () => {
     try {
       const res = await fetch('/api/create-checkout-session', {
@@ -24,14 +26,17 @@ const ResultPage = () => {
       });
       const data = await res.json();
 
-      if (data.id) {
-        window.location.href = `https://checkout.stripe.com/pay/${data.id}`;
-      } else {
-        alert('決済ページの生成に失敗しました。');
+      const stripe = await stripePromise;
+      const result = await stripe.redirectToCheckout({
+        sessionId: data.id,
+      });
+
+      if (result.error) {
+        alert(result.error.message);
       }
     } catch (error) {
       console.error('Checkout error:', error);
-      alert('エラーが発生しました。');
+      alert('決済中にエラーが発生しました。');
     }
   };
 
