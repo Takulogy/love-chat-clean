@@ -1,17 +1,14 @@
 import React from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 const ResultPage = () => {
   const location = useLocation();
-  const navigate = useNavigate();
-
   const answers = location.state?.answers;
 
   if (!answers) {
     return <p>診断データがありません。トップページに戻ってください。</p>;
   }
 
-  // 仮の診断ロジック（あとでAIやスコア連携に差し替え可能）
   const summary = `あなたは「${answers.type}」な人を選ぶとよいでしょう。`;
   const topMatches = [
     `${answers.type} な人`,
@@ -19,8 +16,23 @@ const ResultPage = () => {
     `${answers.value} を大事にする人`
   ];
 
-  const handleGoPremium = () => {
-    navigate('/premium');
+  // Stripe Checkout 呼び出し
+  const handleCheckout = async () => {
+    try {
+      const res = await fetch('/api/create-checkout-session', {
+        method: 'POST',
+      });
+      const data = await res.json();
+
+      if (data.id) {
+        window.location.href = `https://checkout.stripe.com/pay/${data.id}`;
+      } else {
+        alert('決済ページの生成に失敗しました。');
+      }
+    } catch (error) {
+      console.error('Checkout error:', error);
+      alert('エラーが発生しました。');
+    }
   };
 
   return (
@@ -38,7 +50,7 @@ const ResultPage = () => {
       <div style={{ marginTop: '2rem' }}>
         <p>もっと具体的な診断や相談をしたい方はこちら👇</p>
         <button
-          onClick={handleGoPremium}
+          onClick={handleCheckout}
           style={{
             marginTop: '1rem',
             padding: '12px 24px',
