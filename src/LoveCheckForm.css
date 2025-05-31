@@ -51,8 +51,10 @@
   max-width: 120px;
   transition: background-color 0.3s ease;
   flex: 1 0 auto;
+  color: #000000;
 }
 
 .option-button:hover {
   background-color: #d0e9ff;
+  color: #000000;
 }
