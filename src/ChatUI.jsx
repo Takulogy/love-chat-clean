@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from 'react';
+import './ChatUI.css';
+import PDFReport from './components/PDFReport';
 
 const ChatUI = () => {
   const [messages, setMessages] = useState([]);
+  const [input, setInput] = useState('');
+  const [reply, setReply] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // 診断結果を読み込み、OpenAI API経由で分析開始
+  // 最初の診断結果（無料）をもとに自動分析
   useEffect(() => {
     const saved = localStorage.getItem('freeAnswers');
     if (!saved) return;
@@ -18,17 +22,19 @@ const ChatUI = () => {
         const res = await fetch('/api/chat', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ prompt })
+          body: JSON.stringify({ prompt }),
         });
 
         const data = await res.json();
         if (data && data.text) {
-          setMessages([{ sender: 'bot', text: data.text }]);
+          const botMessage = { role: 'assistant', content: data.text };
+          setMessages([botMessage]);
+          setReply(data.text);
         } else {
-          setMessages([{ sender: 'bot', text: '分析に失敗しました。' }]);
+          setMessages([{ role: 'assistant', content: '分析に失敗しました。' }]);
         }
       } catch (err) {
-        setMessages([{ sender: 'bot', text: 'サーバーエラーが発生しました。' }]);
+        setMessages([{ role: 'assistant', content: 'サーバーエラーが発生しました。' }]);
       } finally {
         setLoading(false);
       }
@@ -37,31 +43,7 @@ const ChatUI = () => {
     fetchAnalysis();
   }, []);
 
-  return (
-    <div style={{ padding: '2rem' }}>
-      <h2>AI相談チャット</h2>
-      {loading && <p>診断結果を分析中です...</p>}
-      {messages.map((msg, i) => (
-        <div key={i} style={{ marginBottom: '1rem' }}>
-          <strong>{msg.sender === 'bot' ? '診断AI：' : 'あなた：'}</strong>
-          <p>{msg.text}</p>
-        </div>
-      ))}
-    </div>
-  );
-};
-
-export default ChatUI;
-import React, { useState } from 'react';
-import './ChatUI.css';
-import PDFReport from './components/PDFReport';
-
-const ChatUI = () => {
-  const [messages, setMessages] = useState([]);
-  const [input, setInput] = useState('');
-  const [reply, setReply] = useState('');
-  const [loading, setLoading] = useState(false);
-
+  // ユーザー送信メッセージ処理
   const handleSend = async () => {
     if (!input.trim()) return;
 
@@ -80,13 +62,13 @@ const ChatUI = () => {
       const data = await res.json();
       if (data.text) {
         setMessages([...newMessages, { role: 'assistant', content: data.text }]);
-        setReply(data.text); // PDF生成用に保存
+        setReply(data.text); // PDF生成用
       } else {
-        setReply('エラーが発生しました。');
+        setMessages([...newMessages, { role: 'assistant', content: 'エラーが発生しました。' }]);
       }
     } catch (error) {
       console.error(error);
-      setReply('通信エラーが発生しました。');
+      setMessages([...newMessages, { role: 'assistant', content: '通信エラーが発生しました。' }]);
     }
 
     setLoading(false);
