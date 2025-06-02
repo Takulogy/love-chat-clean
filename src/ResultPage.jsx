@@ -1,77 +1,64 @@
-import React from 'react';
-import { useLocation } from 'react-router-dom';
-import { loadStripe } from '@stripe/stripe-js';
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-// Stripe公開鍵（.envにVITE_STRIPE_PUBLIC_KEYを設定すること！）
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
+const ResultPage = ({ result, topMatches }) => {
+  const navigate = useNavigate();
 
-const ResultPage = () => {
-  const location = useLocation();
-  const answers = location.state?.answers;
+  // 保存処理：localStorage に無料診断結果を保存する
+  useEffect(() => {
+    const dataToSave = {
+      result,
+      topMatches,
+      timestamp: new Date().toISOString()
+    };
+    localStorage.setItem('freeAnswers', JSON.stringify(dataToSave));
+  }, [result, topMatches]);
 
-  if (!answers) {
-    return <p>診断データがありません。トップページに戻ってください。</p>;
-  }
-
-  const summary = `あなたは「${answers.type}」な人を選ぶとよいでしょう。`;
-  const topMatches = [
-    `${answers.type} な人`,
-    `${answers.personality} な人`,
-    `${answers.value ?? "愛情"} を大事にする人` // undefined対策で ?? を使用
-  ];
-
+  // Stripeチェックアウトへ遷移
   const handleCheckout = async () => {
     try {
-      const res = await fetch('/api/create-checkout-session', {
+      const response = await fetch('/api/create-checkout-session', {
         method: 'POST',
-      });
-      const data = await res.json();
-      console.log("StripeセッションID:", data.id);
-
-      const stripe = await stripePromise;
-      const result = await stripe.redirectToCheckout({
-        sessionId: data.id,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({}) // 必要であれば診断データも送信可能
       });
 
-      if (result.error) {
-        alert(result.error.message);
+      const data = await response.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        alert('決済ページの取得に失敗しました。');
       }
     } catch (error) {
-      console.error('Checkout error:', error);
       alert('決済中にエラーが発生しました。');
     }
   };
 
   return (
-    <div style={{ padding: '2rem', textAlign: 'center', backgroundColor: '#f0f8ff', minHeight: '100vh' }}>
-      <h1>診断結果</h1>
-      <p style={{ fontSize: '18px', margin: '1rem 0' }}>{summary}</p>
-
-      <h2>あなたに合いそうなタイプ（上位3位）</h2>
-      <ul style={{ listStyle: 'none', padding: 0, fontSize: '16px' }}>
-        {topMatches.map((match, index) => (
-          <li key={index}>・{match}</li>
+    <div style={{ padding: '2rem', textAlign: 'center' }}>
+      <h2>診断結果</h2>
+      <p>あなたに合いそうなタイプ（上位3位）</p>
+      <ul style={{ listStyle: 'none', padding: 0 }}>
+        {topMatches?.map((match, index) => (
+          <li key={index}>・{match} な人</li>
         ))}
       </ul>
-
-      <div style={{ marginTop: '2rem' }}>
-        <p>もっと具体的な診断や相談をしたい方はこちら👇</p>
-        <button
-          onClick={handleCheckout}
-          style={{
-            marginTop: '1rem',
-            padding: '12px 24px',
-            fontSize: '16px',
-            backgroundColor: '#0070f3',
-            color: 'white',
-            border: 'none',
-            borderRadius: '8px',
-            cursor: 'pointer'
-          }}
-        >
-          プレミアム診断へ進む
-        </button>
-      </div>
+      <p>もっと具体的な診断や相談をしたい方はこちら👇</p>
+      <button
+        onClick={handleCheckout}
+        style={{
+          marginTop: '1rem',
+          padding: '0.8rem 1.6rem',
+          fontSize: '1rem',
+          backgroundColor: '#0070f3',
+          color: 'white',
+          border: 'none',
+          borderRadius: '6px',
+          cursor: 'pointer'
+        }}
+      >
+        プレミアム診断へ進む
+      </button>
     </div>
   );
 };
