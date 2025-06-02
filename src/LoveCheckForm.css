@@ -54,11 +54,42 @@
     box-sizing: border-box;
 }
 
-.option-circle:hover,
+.option-circle:hover {
+    transform: scale(1.1);
+}
+
 .option-circle.selected {
     background-color: #4a90e2;
     color: white;
     transform: scale(1.1);
+}
+
+.option-circle.gathering {
+    animation: gatherToCenter 0.8s ease-in-out forwards;
+}
+
+@keyframes gatherToCenter {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        top: 50% !important;
+        left: 50% !important;
+        right: auto !important;
+        bottom: auto !important;
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 0;
+    }
+}
+
+.options-container.fade-out {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.options-container.fade-in {
+    opacity: 1;
+    transition: opacity 0.3s ease;
 }
 
 /* 6個の選択肢を円形に配置 */
