@@ -1,45 +1,43 @@
-/* LoveCheckForm.css */
-.circle-wrapper {
+
+.form-container {
   position: relative;
   width: 100%;
-  height: 100vh;
-  background: white;
-  overflow: hidden;
+  height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .center-circle {
   position: absolute;
-  top: 50%;
-  left: 50%;
   width: 200px;
   height: 200px;
-  margin-top: -100px;
-  margin-left: -100px;
-  background-color: #6699aa;
+  background-color: #5b9aa0;
   border-radius: 50%;
   text-align: center;
-  padding: 20px;
+  line-height: 1.4;
+  padding-top: 70px;
   color: white;
   font-weight: bold;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
   font-size: 18px;
+  z-index: 1;
 }
 
 .option-circle {
   position: absolute;
-  width: 100px;
-  height: 100px;
+  width: 80px;
+  height: 80px;
   background-color: #a0c8d0;
   border-radius: 50%;
   text-align: center;
-  line-height: 100px;
+  line-height: 80px;
   font-weight: bold;
   color: black;
   cursor: pointer;
   transition: all 0.3s ease;
+  top: 50%;
+  left: 50%;
+  transform-origin: center;
 }
 
 .option-circle:hover,
@@ -47,3 +45,11 @@
   background-color: #4a90e2;
   color: white;
 }
+
+/* 6個配置 */
+.option-0 { transform: rotate(0deg) translate(150px) rotate(0deg); }
+.option-1 { transform: rotate(60deg) translate(150px) rotate(-60deg); }
+.option-2 { transform: rotate(120deg) translate(150px) rotate(-120deg); }
+.option-3 { transform: rotate(180deg) translate(150px) rotate(-180deg); }
+.option-4 { transform: rotate(240deg) translate(150px) rotate(-240deg); }
+.option-5 { transform: rotate(300deg) translate(150px) rotate(-300deg); }
