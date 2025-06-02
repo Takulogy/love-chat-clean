@@ -28,7 +28,8 @@ export default async function handler(req, res) {
       cancel_url: `${req.headers.origin}/result`,
     });
 
-    res.status(200).json({ id: session.id });
+    // ✅ URLで返す（ここが重要）
+    res.status(200).json({ url: session.url });
   } catch (err) {
     console.error('Stripe error:', err);
     res.status(500).json({ error: 'Stripe session error' });
