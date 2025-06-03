@@ -19,12 +19,18 @@ const PDFReport = ({ analysisText }) => {
   };
 
   return (
-    <div>
-      <div ref={reportRef} style={{ padding: '20px', background: '#fff', color: '#000' }}>
-        <h2>あなたへの恋愛アドバイス</h2>
-        <p>{analysisText}</p>
+    <div className="mt-6 text-center">
+      <div
+        ref={reportRef}
+        className="bg-white text-black p-6 rounded shadow-md max-w-xl mx-auto text-left"
+      >
+        <h2 className="text-xl font-bold mb-4">あなたへの恋愛アドバイス</h2>
+        <p className="whitespace-pre-wrap">{analysisText}</p>
       </div>
-      <button onClick={downloadPDF} className="mt-4 bg-pink-500 text-white px-4 py-2 rounded">
+      <button
+        onClick={downloadPDF}
+        className="mt-4 bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded transition-colors"
+      >
         📄 PDFで保存する
       </button>
     </div>

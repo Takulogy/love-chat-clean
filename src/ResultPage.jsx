@@ -5,31 +5,26 @@ const ResultPage = ({ result, topMatches }) => {
   const navigate = useNavigate();
   const [showResult, setShowResult] = useState(false);
 
-  // 解析演出：3秒後に結果表示
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowResult(true);
-    }, 3000);
+    const timer = setTimeout(() => setShowResult(true), 3000);
     return () => clearTimeout(timer);
   }, []);
 
-  // 保存処理：localStorage に無料診断結果を保存
   useEffect(() => {
     const dataToSave = {
       result,
       topMatches,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
     localStorage.setItem('freeAnswers', JSON.stringify(dataToSave));
   }, [result, topMatches]);
 
-  // Stripeチェックアウトへ遷移
   const handleCheckout = async () => {
     try {
       const response = await fetch('/api/create-checkout-session', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({})
+        body: JSON.stringify({}),
       });
 
       const data = await response.json();
@@ -44,46 +39,29 @@ const ResultPage = ({ result, topMatches }) => {
   };
 
   return (
-    <div style={{ padding: '2rem', textAlign: 'center' }}>
+    <div className="p-8 text-center">
       {!showResult ? (
-        <div style={{ fontSize: '1.5rem', animation: 'fadeIn 1s infinite alternate' }}>
+        <div className="text-xl animate-pulse text-gray-600">
           🔍 診断結果を解析中...
         </div>
       ) : (
         <>
-          <h2>診断結果</h2>
-          <p>あなたに合いそうなタイプ（上位3位）</p>
-          <ul style={{ listStyle: 'none', padding: 0 }}>
+          <h2 className="text-2xl font-bold mb-4">診断結果</h2>
+          <p className="mb-4">あなたに合いそうなタイプ（上位3位）</p>
+          <ul className="list-none p-0 mb-6">
             {topMatches?.map((match, index) => (
-              <li key={index}>・{match} な人</li>
+              <li key={index} className="mb-2">・{match} な人</li>
             ))}
           </ul>
-          <p>もっと具体的な診断や相談をしたい方はこちら👇</p>
+          <p className="mb-2">もっと具体的な診断や相談をしたい方はこちら👇</p>
           <button
             onClick={handleCheckout}
-            style={{
-              marginTop: '1rem',
-              padding: '0.8rem 1.6rem',
-              fontSize: '1rem',
-              backgroundColor: '#0070f3',
-              color: 'white',
-              border: 'none',
-              borderRadius: '6px',
-              cursor: 'pointer'
-            }}
+            className="mt-3 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
           >
             プレミアム診断へ進む
           </button>
         </>
       )}
-      <style>
-        {`
-          @keyframes fadeIn {
-            from { opacity: 0.5; }
-            to { opacity: 1; }
-          }
-        `}
-      </style>
     </div>
   );
 };
