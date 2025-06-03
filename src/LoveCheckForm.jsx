@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import './LoveCheckForm.css';
 
 const questions = [
     {
@@ -24,12 +25,17 @@ const LoveCheckForm = () => {
     const [fadeClass, setFadeClass] = useState('fade-in');
 
     const handleSelect = (index) => {
+        if (isGathering) return;
+
         setSelected(index);
         setIsGathering(true);
 
         const newAnswers = [...answers, questions[currentQuestion].options[index]];
 
-        setFadeClass('fade-out');
+        // アニメーション1.5s → フェードアウト後に切り替え
+        setTimeout(() => {
+            setFadeClass('fade-out');
+        }, 1500);
 
         setTimeout(() => {
             setAnswers(newAnswers);
@@ -42,7 +48,7 @@ const LoveCheckForm = () => {
             } else {
                 setIsCompleted(true);
             }
-        }, 300);
+        }, 1800); // gather + fadeの余裕時間
     };
 
     const resetQuiz = () => {
@@ -56,21 +62,18 @@ const LoveCheckForm = () => {
 
     if (isCompleted) {
         return (
-            <div className="min-h-screen flex items-center justify-center font-sans">
-                <div className="text-center p-10 bg-blue-50 rounded-3xl shadow-lg">
-                    <h2 className="text-2xl text-teal-600 font-bold mb-5">診断完了！</h2>
-                    <p className="mb-5">あなたの回答:</p>
-                    <ul className="list-none p-0">
+            <div className="form-container">
+                <div className="completion-container">
+                    <h2 className="completion-title">診断完了！</h2>
+                    <p className="completion-text">あなたの回答:</p>
+                    <ul className="answers-list">
                         {answers.map((answer, index) => (
-                            <li key={index} className="my-3 p-3 bg-teal-400 text-white rounded-lg">
+                            <li key={index} className="answer-item">
                                 {questions[index].question} → {answer}
                             </li>
                         ))}
                     </ul>
-                    <button 
-                        onClick={resetQuiz}
-                        className="mt-5 px-5 py-3 bg-teal-600 text-white border-none rounded-lg cursor-pointer text-base hover:bg-teal-700 transition-colors"
-                    >
+                    <button onClick={resetQuiz} className="reset-button">
                         もう一度診断する
                     </button>
                 </div>
@@ -81,61 +84,26 @@ const LoveCheckForm = () => {
     const current = questions[currentQuestion];
 
     return (
-        <div className="relative w-full h-screen flex justify-center items-center font-sans">
-            <div className={`relative w-96 h-96 transition-opacity duration-300 ${fadeClass === 'fade-out' ? 'opacity-0' : 'opacity-100'}`}>
-                <div className="absolute w-48 h-48 bg-teal-600 rounded-full flex justify-center items-center text-white font-bold text-base z-10 text-center p-5 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+        <div className="form-container">
+            <div className={`options-container ${fadeClass}`}>
+                <div className="center-circle">
                     <div>
-                        <div className="text-xs mb-2 opacity-80">
+                        <div className="question-number">
                             質問 {currentQuestion + 1} / {questions.length}
                         </div>
-                        <div className="font-bold">{current.question}</div>
+                        <div className="question-text">{current.question}</div>
                     </div>
                 </div>
-
-                {current.options.map((option, index) => {
-                    const positions = [
-                        'top-0 left-1/2 transform -translate-x-1/2',
-                        'top-1/4 right-0 transform -translate-y-1/2',
-                        'bottom-1/4 right-0 transform translate-y-1/2',
-                        'bottom-0 left-1/2 transform -translate-x-1/2',
-                        'bottom-1/4 left-0 transform translate-y-1/2',
-                        'top-1/4 left-0 transform -translate-y-1/2',
-                    ];
-
-                    const hoverTransforms = Array(6).fill('hover:scale-110');
-
-                    return (
-                        <div
-                            key={index}
-                            className={`absolute w-20 h-20 bg-teal-300 rounded-full flex justify-center items-center font-bold text-black cursor-pointer transition-all duration-300 text-center text-xs p-1 ${positions[index]} ${hoverTransforms[index]} ${
-                                selected === index ? 'bg-blue-500 text-white scale-110' : 'hover:bg-blue-500 hover:text-white'
-                            } ${isGathering && selected === index ? 'animate-pulse' : ''}`}
-                            onClick={() => !isGathering && handleSelect(index)}
-                            style={{
-                                animation: isGathering && selected === index ? 'gather 1.5s ease-in-out forwards' : 'none'
-                            }}
-                        >
-                            {option}
-                        </div>
-                    );
-                })}
+                {current.options.map((option, index) => (
+                    <div
+                        key={index}
+                        className={`option-circle option-${index} ${selected === index ? 'selected' : ''} ${isGathering ? 'gathering' : ''}`}
+                        onClick={() => handleSelect(index)}
+                    >
+                        {option}
+                    </div>
+                ))}
             </div>
-
-            <style jsx>{`
-                @keyframes gather {
-                    0% {
-                        opacity: 1;
-                    }
-                    100% {
-                        top: calc(50% - 2.5rem) !important;
-                        left: calc(50% - 2.5rem) !important;
-                        right: auto !important;
-                        bottom: auto !important;
-                        transform: scale(0);
-                        opacity: 0;
-                    }
-                }
-            `}</style>
         </div>
     );
 };

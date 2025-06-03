@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import './ChatUI.css';
 import PDFReport from './components/PDFReport';
 
 const ChatUI = () => {
@@ -7,6 +8,7 @@ const ChatUI = () => {
   const [reply, setReply] = useState('');
   const [loading, setLoading] = useState(false);
 
+  // 最初の診断結果（無料）をもとに自動分析
   useEffect(() => {
     const saved = localStorage.getItem('freeAnswers');
     if (!saved) return;
@@ -41,6 +43,7 @@ const ChatUI = () => {
     fetchAnalysis();
   }, []);
 
+  // ユーザー送信メッセージ処理
   const handleSend = async () => {
     if (!input.trim()) return;
 
@@ -59,7 +62,7 @@ const ChatUI = () => {
       const data = await res.json();
       if (data.text) {
         setMessages([...newMessages, { role: 'assistant', content: data.text }]);
-        setReply(data.text);
+        setReply(data.text); // PDF生成用
       } else {
         setMessages([...newMessages, { role: 'assistant', content: 'エラーが発生しました。' }]);
       }
@@ -72,44 +75,29 @@ const ChatUI = () => {
   };
 
   return (
-    <div className="flex flex-col items-center h-screen bg-gray-100 relative pb-24">
-      <div className="absolute top-10 left-1/2 transform -translate-x-1/2 animate-bounce">
-        <img src="/character_normal.png" alt="キャラ" className="w-44 h-44 rounded-full object-cover" />
-      </div>
-
-      <div className="mt-60 w-full max-w-xl flex-1 overflow-y-auto flex flex-col gap-2 p-4">
+    <div className="chat-container">
+      <div className="chat-box">
         {messages.map((msg, index) => (
-          <div
-            key={index}
-            className={`max-w-[80%] p-3 rounded-2xl text-base whitespace-pre-wrap ${
-              msg.role === 'user' ? 'self-end bg-green-200' : 'self-start bg-white border border-gray-300'
-            }`}
-          >
+          <div key={index} className={`message ${msg.role}`}>
             {msg.content}
           </div>
         ))}
-        {loading && <div className="self-start bg-white border border-gray-300 p-3 rounded-2xl">考え中だよん…</div>}
+        {loading && <div className="message assistant">考え中だよん…</div>}
       </div>
 
-      <div className="fixed bottom-0 w-full max-w-xl bg-gray-100 flex justify-center p-4 gap-2">
+      <div className="input-box">
         <input
           type="text"
           value={input}
           placeholder="相談してみてね♥"
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-          className="flex-1 p-2 text-base rounded-lg border border-gray-300"
         />
-        <button
-          onClick={handleSend}
-          className="px-4 py-2 bg-green-500 text-white rounded-lg font-bold hover:bg-green-600 transition"
-        >
-          送信
-        </button>
+        <button onClick={handleSend}>送信</button>
       </div>
 
       {reply && (
-        <div className="mt-4">
+        <div className="pdf-section">
           <PDFReport analysisText={reply} />
         </div>
       )}
