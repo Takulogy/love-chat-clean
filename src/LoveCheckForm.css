@@ -55,6 +55,8 @@
 }
 
 .option-circle:hover {
+    background-color: #4a90e2;
+    color: white;
     transform: scale(1.1);
 }
 
@@ -65,7 +67,7 @@
 }
 
 .option-circle.gathering {
-    animation: gatherToCenter 0.8s ease-in-out forwards;
+    animation: gatherToCenter 1.5s ease-in-out forwards;
 }
 
 @keyframes gatherToCenter {
@@ -80,6 +82,15 @@
         transform: translate(-50%, -50%) scale(0);
         opacity: 0;
     }
+}
+
+.option-0.gathering,
+.option-1.gathering,
+.option-2.gathering,
+.option-3.gathering,
+.option-4.gathering,
+.option-5.gathering {
+    animation: gatherToCenter 1.5s ease-in-out forwards;
 }
 
 .options-container.fade-out {
@@ -99,6 +110,20 @@
 .option-3 { bottom: 0; left: 50%; transform: translateX(-50%); }
 .option-4 { bottom: 25%; left: 0; transform: translateY(50%); }
 .option-5 { top: 25%; left: 0; transform: translateY(-50%); }
+
+.option-0:hover { transform: translateX(-50%) scale(1.1); }
+.option-1:hover { transform: translateY(-50%) scale(1.1); }
+.option-2:hover { transform: translateY(50%) scale(1.1); }
+.option-3:hover { transform: translateX(-50%) scale(1.1); }
+.option-4:hover { transform: translateY(50%) scale(1.1); }
+.option-5:hover { transform: translateY(-50%) scale(1.1); }
+
+.option-0.selected { transform: translateX(-50%) scale(1.1); }
+.option-1.selected { transform: translateY(-50%) scale(1.1); }
+.option-2.selected { transform: translateY(50%) scale(1.1); }
+.option-3.selected { transform: translateX(-50%) scale(1.1); }
+.option-4.selected { transform: translateY(50%) scale(1.1); }
+.option-5.selected { transform: translateY(-50%) scale(1.1); }
 
 /* 診断完了画面のスタイル */
 .completion-container {

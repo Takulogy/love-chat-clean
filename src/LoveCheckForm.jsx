@@ -25,29 +25,30 @@ const LoveCheckForm = () => {
     const [fadeClass, setFadeClass] = useState('fade-in');
 
     const handleSelect = (index) => {
+        if (isGathering) return;
+
         setSelected(index);
         setIsGathering(true);
-        
+
         const newAnswers = [...answers, questions[currentQuestion].options[index]];
-        
-        // 選択肢が中央に集まるアニメーション
+
+        // アニメーション1.5s → フェードアウト後に切り替え
         setTimeout(() => {
             setFadeClass('fade-out');
-        }, 800);
-        
-        // 次の質問への遷移
+        }, 1500);
+
         setTimeout(() => {
             setAnswers(newAnswers);
             setSelected(null);
             setIsGathering(false);
-            
+
             if (currentQuestion + 1 < questions.length) {
                 setCurrentQuestion(currentQuestion + 1);
                 setFadeClass('fade-in');
             } else {
                 setIsCompleted(true);
             }
-        }, 1100);
+        }, 1800); // gather + fadeの余裕時間
     };
 
     const resetQuiz = () => {
@@ -72,10 +73,7 @@ const LoveCheckForm = () => {
                             </li>
                         ))}
                     </ul>
-                    <button 
-                        onClick={resetQuiz}
-                        className="reset-button"
-                    >
+                    <button onClick={resetQuiz} className="reset-button">
                         もう一度診断する
                     </button>
                 </div>
@@ -99,10 +97,8 @@ const LoveCheckForm = () => {
                 {current.options.map((option, index) => (
                     <div
                         key={index}
-                        className={`option-circle option-${index} ${
-                            selected === index ? 'selected' : ''
-                        } ${isGathering ? 'gathering' : ''}`}
-                        onClick={() => !isGathering && handleSelect(index)}
+                        className={`option-circle option-${index} ${selected === index ? 'selected' : ''} ${isGathering ? 'gathering' : ''}`}
+                        onClick={() => handleSelect(index)}
                     >
                         {option}
                     </div>
