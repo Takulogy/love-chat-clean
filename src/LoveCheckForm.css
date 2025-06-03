@@ -57,13 +57,11 @@
 .option-circle:hover {
     background-color: #4a90e2;
     color: white;
-    transform: scale(1.1);
 }
 
 .option-circle.selected {
     background-color: #4a90e2;
     color: white;
-    transform: scale(1.1);
 }
 
 .option-circle.gathering {
@@ -75,24 +73,43 @@
         opacity: 1;
     }
     100% {
-        top: 50% !important;
-        left: 50% !important;
+        top: calc(50% - 40px) !important;
+        left: calc(50% - 40px) !important;
         right: auto !important;
         bottom: auto !important;
-        transform: translate(-50%, -50%) scale(0);
+        transform: scale(0);
         opacity: 0;
     }
 }
 
-.option-0.gathering,
-.option-1.gathering,
-.option-2.gathering,
-.option-3.gathering,
-.option-4.gathering,
-.option-5.gathering {
-    animation: gatherToCenter 1.5s ease-in-out forwards;
-}
+/* 各選択肢の位置 */
+.option-0 { top: 0; left: 50%; transform: translateX(-50%); }
+.option-1 { top: 25%; right: 0; transform: translateY(-50%); }
+.option-2 { bottom: 25%; right: 0; transform: translateY(50%); }
+.option-3 { bottom: 0; left: 50%; transform: translateX(-50%); }
+.option-4 { bottom: 25%; left: 0; transform: translateY(50%); }
+.option-5 { top: 25%; left: 0; transform: translateY(-50%); }
 
+/* hover・selected 状態のスケーリング */
+.option-0:hover,
+.option-0.selected { transform: translateX(-50%) scale(1.1); }
+
+.option-1:hover,
+.option-1.selected { transform: translateY(-50%) scale(1.1); }
+
+.option-2:hover,
+.option-2.selected { transform: translateY(50%) scale(1.1); }
+
+.option-3:hover,
+.option-3.selected { transform: translateX(-50%) scale(1.1); }
+
+.option-4:hover,
+.option-4.selected { transform: translateY(50%) scale(1.1); }
+
+.option-5:hover,
+.option-5.selected { transform: translateY(-50%) scale(1.1); }
+
+/* フェードイン・アウト演出 */
 .options-container.fade-out {
     opacity: 0;
     transition: opacity 0.3s ease;
@@ -101,78 +118,4 @@
 .options-container.fade-in {
     opacity: 1;
     transition: opacity 0.3s ease;
-}
-
-/* 6個の選択肢を円形に配置 */
-.option-0 { top: 0; left: 50%; transform: translateX(-50%); }
-.option-1 { top: 25%; right: 0; transform: translateY(-50%); }
-.option-2 { bottom: 25%; right: 0; transform: translateY(50%); }
-.option-3 { bottom: 0; left: 50%; transform: translateX(-50%); }
-.option-4 { bottom: 25%; left: 0; transform: translateY(50%); }
-.option-5 { top: 25%; left: 0; transform: translateY(-50%); }
-
-.option-0:hover { transform: translateX(-50%) scale(1.1); }
-.option-1:hover { transform: translateY(-50%) scale(1.1); }
-.option-2:hover { transform: translateY(50%) scale(1.1); }
-.option-3:hover { transform: translateX(-50%) scale(1.1); }
-.option-4:hover { transform: translateY(50%) scale(1.1); }
-.option-5:hover { transform: translateY(-50%) scale(1.1); }
-
-.option-0.selected { transform: translateX(-50%) scale(1.1); }
-.option-1.selected { transform: translateY(-50%) scale(1.1); }
-.option-2.selected { transform: translateY(50%) scale(1.1); }
-.option-3.selected { transform: translateX(-50%) scale(1.1); }
-.option-4.selected { transform: translateY(50%) scale(1.1); }
-.option-5.selected { transform: translateY(-50%) scale(1.1); }
-
-/* 診断完了画面のスタイル */
-.completion-container {
-    text-align: center;
-    padding: 40px;
-    background-color: #f0f8ff;
-    border-radius: 20px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-}
-
-.completion-title {
-    color: #5b9aa0;
-    margin-bottom: 20px;
-}
-
-.completion-text {
-    margin-bottom: 20px;
-}
-
-.answers-list {
-    list-style: none;
-    padding: 0;
-}
-
-.answer-item {
-    margin: 10px 0;
-    padding: 10px;
-    background-color: #a0c8d0;
-    border-radius: 10px;
-    color: white;
-}
-
-.reset-button {
-    margin-top: 20px;
-    padding: 10px 20px;
-    background-color: #5b9aa0;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-.question-number {
-    font-size: 12px;
-    margin-bottom: 10px;
-    opacity: 0.8;
-}
-
-.question-text {
-    font-weight: bold;
 }

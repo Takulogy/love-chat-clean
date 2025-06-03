@@ -25,18 +25,17 @@ const LoveCheckForm = () => {
     const [fadeClass, setFadeClass] = useState('fade-in');
 
     const handleSelect = (index) => {
-        if (isGathering) return;
-
         setSelected(index);
         setIsGathering(true);
 
         const newAnswers = [...answers, questions[currentQuestion].options[index]];
 
-        // アニメーション1.5s → フェードアウト後に切り替え
+        // gatherアニメーションが終わったあとにfadeOut
         setTimeout(() => {
             setFadeClass('fade-out');
         }, 1500);
 
+        // フェードアウト後に次の質問へ
         setTimeout(() => {
             setAnswers(newAnswers);
             setSelected(null);
@@ -48,7 +47,7 @@ const LoveCheckForm = () => {
             } else {
                 setIsCompleted(true);
             }
-        }, 1800); // gather + fadeの余裕時間
+        }, 2000);
     };
 
     const resetQuiz = () => {
@@ -63,19 +62,15 @@ const LoveCheckForm = () => {
     if (isCompleted) {
         return (
             <div className="form-container">
-                <div className="completion-container">
-                    <h2 className="completion-title">診断完了！</h2>
-                    <p className="completion-text">あなたの回答:</p>
-                    <ul className="answers-list">
+                <div className="result-box">
+                    <h2>診断完了！</h2>
+                    <p>あなたの回答:</p>
+                    <ul>
                         {answers.map((answer, index) => (
-                            <li key={index} className="answer-item">
-                                {questions[index].question} → {answer}
-                            </li>
+                            <li key={index}>{questions[index].question} → {answer}</li>
                         ))}
                     </ul>
-                    <button onClick={resetQuiz} className="reset-button">
-                        もう一度診断する
-                    </button>
+                    <button onClick={resetQuiz}>もう一度診断する</button>
                 </div>
             </div>
         );
@@ -88,17 +83,17 @@ const LoveCheckForm = () => {
             <div className={`options-container ${fadeClass}`}>
                 <div className="center-circle">
                     <div>
-                        <div className="question-number">
+                        <div className="question-count">
                             質問 {currentQuestion + 1} / {questions.length}
                         </div>
-                        <div className="question-text">{current.question}</div>
+                        <div>{current.question}</div>
                     </div>
                 </div>
                 {current.options.map((option, index) => (
                     <div
                         key={index}
-                        className={`option-circle option-${index} ${selected === index ? 'selected' : ''} ${isGathering ? 'gathering' : ''}`}
-                        onClick={() => handleSelect(index)}
+                        className={`option-circle option-${index} ${selected === index ? 'selected' : ''} ${isGathering && selected === index ? 'gathering' : ''}`}
+                        onClick={() => !isGathering && handleSelect(index)}
                     >
                         {option}
                     </div>
