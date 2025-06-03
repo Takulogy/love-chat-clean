@@ -1,77 +1,30 @@
-import React, { useState } from "react";
-import "./LoveCheckForm.css";
+import React, { useState } from 'react';
+import RadarChart from './RadarChart';
 
 const questions = [
-  {
-    text: "会う頻度",
-    options: ["毎日", "週3", "週1", "月1", "気分", "未定"],
-    scores: [
-      { passion: 2 }, { passion: 1 }, { cool: 1 }, { cool: 2 }, { independent: 1 }, { independent: 2 }
-    ]
-  },
-  {
-    text: "返信速度",
-    options: ["即レス", "30分", "1時間", "半日", "1日", "気が向けば"],
-    scores: [
-      { empathy: 2 }, { empathy: 1 }, { cool: 1 }, { cool: 2 }, { independent: 1 }, { independent: 2 }
-    ]
-  },
-  {
-    text: "主導権",
-    options: ["全部任せたい", "多めに任せたい", "半々", "自分が多め", "自分が全部", "その時次第"],
-    scores: [
-      { dependent: 2 }, { dependent: 1 }, {}, { independent: 1 }, { independent: 2 }, { cool: 1 }
-    ]
-  },
-  {
-    text: "ケンカの後",
-    options: ["即謝る", "すぐ仲直り", "距離とる", "しばらく無視", "記憶消す", "そもそも怒らない"],
-    scores: [
-      { empathy: 2 }, { empathy: 1 }, { cool: 1 }, { cool: 2 }, { passion: 1 }, { independent: 1 }
-    ]
-  },
-  {
-    text: "理想のデート",
-    options: ["遊園地", "カフェ", "自然", "旅行", "家", "映画"],
-    scores: [
-      { passion: 2 }, { empathy: 1 }, { cool: 1 }, { passion: 1 }, { independent: 1 }, { cool: 1 }
-    ]
-  },
-  {
-    text: "愛情表現",
-    options: ["言葉が重要", "行動で示す", "表情で伝える", "恥ずかしい", "いらない", "時々する"],
-    scores: [
-      { empathy: 2 }, { passion: 2 }, { empathy: 1 }, { cool: 1 }, { independent: 2 }, { cool: 1 }
-    ]
-  },
-  {
-    text: "浮気の境界線",
-    options: ["連絡でアウト", "食事もダメ", "手を繋いだら", "キスから", "体の関係", "定義しない"],
-    scores: [
-      { dependent: 2 }, { dependent: 1 }, { empathy: 1 }, { passion: 1 }, { cool: 2 }, { independent: 2 }
-    ]
-  },
-  {
-    text: "連絡頻度",
-    options: ["1日10回", "5回", "2回", "1回", "気分", "気づいたら"],
-    scores: [
-      { empathy: 2 }, { empathy: 1 }, {}, { cool: 1 }, { independent: 1 }, { independent: 2 }
-    ]
-  },
-  {
-    text: "価値観の違い",
-    options: ["合わせる", "話し合う", "我慢する", "無視する", "すぐ別れる", "放置"],
-    scores: [
-      { empathy: 2 }, { cool: 1 }, { dependent: 1 }, { cool: 2 }, { independent: 2 }, { independent: 1 }
-    ]
-  },
-  {
-    text: "嫉妬した時",
-    options: ["我慢", "言う", "泣く", "怒る", "無視", "黙る"],
-    scores: [
-      { cool: 2 }, { empathy: 2 }, { dependent: 1 }, { passion: 2 }, { cool: 1 }, { independent: 1 }
-    ]
-  }
+  { question: '理想のデート', options: ['海', '山', '街', '家'] },
+  { question: '恋人の第一印象', options: ['笑顔', '服', '声', '雰囲気'] },
+  { question: '一緒にしたいこと', options: ['旅行', '料理', '映画', 'スポーツ'] },
+  { question: '連絡頻度', options: ['毎日', '週2', '気まま', 'ほぼ無'] },
+  { question: 'デートの予算', options: ['高め', '中間', '安め', '割勘'] },
+  { question: '嫉妬深さ', options: ['強', '中', '弱', '皆無'] },
+  { question: 'ケンカ後の対応', options: ['話す', '時間', '謝る', '無視'] },
+  { question: '価値観重視', options: ['趣味', 'お金', '家族', '性格'] },
+  { question: '恋のスピード', options: ['即', '普通', '遅', '様子'] },
+  { question: '将来観', options: ['結婚', '同棲', '自由', '未定'] }
+];
+
+const scoresMap = [
+  [3, 1, 2, 4], // 質問1のスコア（オプション順）
+  [2, 3, 4, 1],
+  [4, 1, 2, 3],
+  [1, 3, 2, 4],
+  [2, 4, 1, 3],
+  [3, 2, 4, 1],
+  [4, 2, 1, 3],
+  [2, 1, 3, 4],
+  [3, 4, 1, 2],
+  [1, 2, 4, 3],
 ];
 
 const LoveCheckForm = () => {
@@ -80,41 +33,26 @@ const LoveCheckForm = () => {
   const [selected, setSelected] = useState(null);
   const [isCompleted, setIsCompleted] = useState(false);
   const [isGathering, setIsGathering] = useState(false);
-  const [fadeClass, setFadeClass] = useState("fade-in");
-  const [score, setScore] = useState({
-    passion: 0,
-    cool: 0,
-    independent: 0,
-    dependent: 0,
-    empathy: 0
-  });
+  const [fadeClass, setFadeClass] = useState('fade-in');
 
   const handleSelect = (index) => {
     setSelected(index);
     setIsGathering(true);
 
-    const selectedScore = questions[currentQuestion].scores[index];
-    const newScore = { ...score };
-
-    for (const key in selectedScore) {
-      newScore[key] += selectedScore[key];
-    }
-
-    const newAnswers = [...answers, questions[currentQuestion].options[index]];
+    const newAnswers = [...answers, index];
 
     setTimeout(() => {
-      setFadeClass("fade-out");
+      setFadeClass('fade-out');
     }, 1500);
 
     setTimeout(() => {
       setAnswers(newAnswers);
-      setScore(newScore);
       setSelected(null);
       setIsGathering(false);
 
       if (currentQuestion + 1 < questions.length) {
         setCurrentQuestion(currentQuestion + 1);
-        setFadeClass("fade-in");
+        setFadeClass('fade-in');
       } else {
         setIsCompleted(true);
       }
@@ -127,30 +65,32 @@ const LoveCheckForm = () => {
     setSelected(null);
     setIsCompleted(false);
     setIsGathering(false);
-    setFadeClass("fade-in");
-    setScore({
-      passion: 0,
-      cool: 0,
-      independent: 0,
-      dependent: 0,
-      empathy: 0
-    });
+    setFadeClass('fade-in');
   };
+
+  const calculateScore = () => {
+    const totalScore = [0, 0, 0, 0, 0]; // 5次元のスコア
+    answers.forEach((ans, i) => {
+      const weight = scoresMap[i][ans];
+      totalScore[i % 5] += weight;
+    });
+    return totalScore;
+  };
+
+  const score = calculateScore();
 
   return (
     <div className="form-container">
       {!isCompleted ? (
         <>
-          <div className="center-circle">
-            {questions[currentQuestion].text}
-          </div>
+          <div className="center-circle">{questions[currentQuestion].question}</div>
           <div className={`options-container ${fadeClass}`}>
             {questions[currentQuestion].options.map((option, index) => (
               <div
                 key={index}
                 className={`option-circle option-${index} ${
-                  selected === index ? "selected" : ""
-                } ${isGathering && selected !== index ? "gathering" : ""}`}
+                  selected === index ? 'selected' : ''
+                } ${isGathering && selected !== index ? 'gathering' : ''}`}
                 onClick={() => handleSelect(index)}
               >
                 {option}
@@ -159,31 +99,14 @@ const LoveCheckForm = () => {
           </div>
         </>
       ) : (
-        <div className="result">
+        <div className="result-container">
           <h2>診断完了！</h2>
-          <p>あなたのタイプは：「{getPersonalityType(score)}」です</p>
+          <RadarChart score={score} />
           <button onClick={resetQuiz}>もう一度診断する</button>
         </div>
       )}
     </div>
   );
-};
-
-// スコアからタイプを判定
-const getPersonalityType = (score) => {
-  const maxKey = Object.keys(score).reduce((a, b) =>
-    score[a] > score[b] ? a : b
-  );
-
-  const typeMap = {
-    passion: "ジェットコースター姫",
-    cool: "氷の貴公子",
-    independent: "風まかせ猫",
-    dependent: "抱っこハムスター",
-    empathy: "涙もろいイルカ"
-  };
-
-  return typeMap[maxKey] || "ミステリービースト";
 };
 
 export default LoveCheckForm;
