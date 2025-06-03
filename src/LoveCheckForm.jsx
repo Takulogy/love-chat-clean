@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import "./LoveCheckForm.css";
+import RadarChartComponent from './components/RadarChartComponent';
+
 
 const questions = [
   {
@@ -162,6 +164,9 @@ const LoveCheckForm = () => {
         <div className="result">
           <h2>診断完了！</h2>
           <p>あなたのタイプは：「{getPersonalityType(score)}」です</p>
+          {/* レーダーチャートを表示 */}
+          <RadarChartComponent score={score} />
+
           <button onClick={resetQuiz}>もう一度診断する</button>
         </div>
       )}
