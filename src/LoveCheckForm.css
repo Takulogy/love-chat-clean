@@ -68,6 +68,12 @@
     animation: gatherToCenter 1.5s ease-in-out forwards;
 }
 
+.option-circle.fade-out {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+
 @keyframes gatherToCenter {
     0% {
         opacity: 1;

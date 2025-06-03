@@ -92,7 +92,10 @@ const LoveCheckForm = () => {
                 {current.options.map((option, index) => (
                     <div
                         key={index}
-                        className={`option-circle option-${index} ${selected === index ? 'selected' : ''} ${isGathering && selected === index ? 'gathering' : ''}`}
+                        className={`option-circle option-${index} 
+                                                          ${selected === index ? 'selected' : ''} 
+                                                          ${isGathering && selected !== index ? 'fade-out' : ''} 
+                                                          ${isGathering && selected === index ? 'gathering' : ''}`}
                         onClick={() => !isGathering && handleSelect(index)}
                     >
                         {option}
