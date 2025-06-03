@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import RadarChart from './RadarChart';
+import RadarChart from './components/RadarChart';
 
 const questions = [
   { question: '理想のデート', options: ['海', '山', '街', '家'] },

@@ -1,71 +1,34 @@
-// src/components/RadarChart.jsx
-import React from "react";
-import { Radar } from "react-chartjs-2";
+import React from 'react';
 import {
-  Chart as ChartJS,
-  RadialLinearScale,
-  PointElement,
-  LineElement,
-  Filler,
-  Tooltip,
-  Legend,
-} from "chart.js";
+  Radar,
+  RadarChart,
+  PolarGrid,
+  PolarAngleAxis,
+  PolarRadiusAxis,
+  ResponsiveContainer,
+} from 'recharts';
 
-ChartJS.register(
-  RadialLinearScale,
-  PointElement,
-  LineElement,
-  Filler,
-  Tooltip,
-  Legend
-);
+const categories = ['情熱', '冷静', '自立', '依存', '共感'];
 
-const RadarChart = ({ score }) => {
-  const data = {
-    labels: ["情熱", "冷静", "自立", "依存", "共感"],
-    datasets: [
-      {
-        label: "あなたの性格レーダー",
-        data: [
-          score.passion,
-          score.cool,
-          score.independent,
-          score.dependent,
-          score.empathy,
-        ],
-        backgroundColor: "rgba(90, 200, 250, 0.3)",
-        borderColor: "rgba(90, 200, 250, 1)",
-        borderWidth: 2,
-        pointBackgroundColor: "rgba(90, 200, 250, 1)",
-      },
-    ],
-  };
+const RadarChartComponent = ({ score }) => {
+  const data = categories.map((category, index) => ({
+    subject: category,
+    A: score[index],
+    fullMark: 10,
+  }));
 
-  const options = {
-    responsive: true,
-    scales: {
-      r: {
-        min: 0,
-        max: 10,
-        ticks: {
-          stepSize: 2,
-          backdropColor: "transparent",
-        },
-        pointLabels: {
-          font: {
-            size: 14,
-          },
-        },
-      },
-    },
-    plugins: {
-      legend: {
-        display: false,
-      },
-    },
-  };
-
-  return <Radar data={data} options={options} />;
+  return (
+    <div style={{ width: '100%', height: 400 }}>
+      <ResponsiveContainer>
+        <RadarChart cx="50%" cy="50%" outerRadius="80%" data={data}>
+          <PolarGrid />
+          <PolarAngleAxis dataKey="subject" />
+          <PolarRadiusAxis angle={30} domain={[0, 10]} />
+          <Radar name="Score" dataKey="A" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6} />
+        </RadarChart>
+      </ResponsiveContainer>
+    </div>
+  );
 };
 
-export default RadarChart;
+export default RadarChartComponent;
