@@ -2,29 +2,29 @@ import React, { useState } from 'react';
 import RadarChart from './components/RadarChart';
 
 const questions = [
-  { question: '理想のデート', options: ['海', '山', '街', '家'] },
-  { question: '恋人の第一印象', options: ['笑顔', '服', '声', '雰囲気'] },
-  { question: '一緒にしたいこと', options: ['旅行', '料理', '映画', 'スポーツ'] },
-  { question: '連絡頻度', options: ['毎日', '週2', '気まま', 'ほぼ無'] },
-  { question: 'デートの予算', options: ['高め', '中間', '安め', '割勘'] },
-  { question: '嫉妬深さ', options: ['強', '中', '弱', '皆無'] },
-  { question: 'ケンカ後の対応', options: ['話す', '時間', '謝る', '無視'] },
-  { question: '価値観重視', options: ['趣味', 'お金', '家族', '性格'] },
-  { question: '恋のスピード', options: ['即', '普通', '遅', '様子'] },
-  { question: '将来観', options: ['結婚', '同棲', '自由', '未定'] }
+  { question: '理想のデート', options: ['海', '山', '街', '家', '公園', '温泉'] },
+  { question: '第一印象重視', options: ['顔', '服', '声', '雰囲気', '話し方', '清潔感'] },
+  { question: '休日の過ごし方', options: ['映画', '読書', '運動', '買物', '寝る', '料理'] },
+  { question: '返信頻度', options: ['即', '1h', '半日', '1日', '気分', '無視'] },
+  { question: 'デート代負担', options: ['全額', '多め', '半分', '少し', 'なし', '交互'] },
+  { question: '嫉妬度合い', options: ['激高', '高', '中', '低', '無', 'ゼロ'] },
+  { question: '喧嘩の対応', options: ['話す', '謝る', '黙る', '離れる', '泣く', 'スルー'] },
+  { question: '価値観重視', options: ['趣味', '金銭', '家族', '愛情', '自立', '性格'] },
+  { question: '恋の始まり', options: ['一目', '徐々', '告白', '流れ', '勘', '勢い'] },
+  { question: '将来観', options: ['結婚', '同棲', '別居', '自由', '未定', '遠距'] }
 ];
 
 const scoresMap = [
-  [3, 1, 2, 4], // 質問1のスコア（オプション順）
-  [2, 3, 4, 1],
-  [4, 1, 2, 3],
-  [1, 3, 2, 4],
-  [2, 4, 1, 3],
-  [3, 2, 4, 1],
-  [4, 2, 1, 3],
-  [2, 1, 3, 4],
-  [3, 4, 1, 2],
-  [1, 2, 4, 3],
+  [3, 1, 2, 4, 2, 1],
+  [2, 3, 4, 1, 2, 1],
+  [4, 1, 2, 3, 2, 1],
+  [1, 3, 2, 4, 2, 1],
+  [2, 4, 1, 3, 1, 2],
+  [3, 2, 4, 1, 2, 1],
+  [4, 2, 1, 3, 2, 1],
+  [2, 1, 3, 4, 2, 1],
+  [3, 4, 1, 2, 1, 2],
+  [1, 2, 4, 3, 2, 1]
 ];
 
 const LoveCheckForm = () => {
@@ -69,7 +69,7 @@ const LoveCheckForm = () => {
   };
 
   const calculateScore = () => {
-    const totalScore = [0, 0, 0, 0, 0]; // 5次元のスコア
+    const totalScore = [0, 0, 0, 0, 0];
     answers.forEach((ans, i) => {
       const weight = scoresMap[i][ans];
       totalScore[i % 5] += weight;
