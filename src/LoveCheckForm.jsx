@@ -176,19 +176,29 @@ const LoveCheckForm = () => {
           </div>
         </>
       ) : (
-        <div className="result">
-          <div className="character-image">
-            <img 
-              src={typeImages[getPersonalityTypeKey(score)]} 
-              alt={getPersonalityType(score)}
-              style={{ width: '150px', height: '150px', borderRadius: '50%', marginBottom: '20px' }}
-            />
+        <div className="result-container">
+          <div className="result-header">
+            <h2>診断完了！</h2>
+            <p>あなたのタイプは：「{getPersonalityType(score)}」です</p>
           </div>
-          <h2>診断完了！</h2>
-          <p>あなたのタイプは：「{getPersonalityType(score)}」です</p>
-          {/* レーダーチャートを表示 */}
-          <RadarChartComponent score={score} />
-          <button onClick={resetQuiz}>もう一度診断する</button>
+          
+          <div className="result-content">
+            <div className="chart-section">
+              <RadarChartComponent score={score} />
+            </div>
+            
+            <div className="character-section">
+              <img 
+                src={typeImages[getPersonalityTypeKey(score)]} 
+                alt={getPersonalityType(score)}
+                className="character-image"
+              />
+            </div>
+          </div>
+          
+          <div className="result-footer">
+            <button onClick={resetQuiz} className="restart-button">もう一度診断する</button>
+          </div>
         </div>
       )}
     </div>
