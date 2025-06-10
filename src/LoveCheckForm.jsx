@@ -155,9 +155,9 @@ const LoveCheckForm = () => {
   };
 
   return (
-    <div className="form-container">
+    <>
       {!isCompleted ? (
-        <>
+        <div className="form-container">
           <div className="center-circle">
             {questions[currentQuestion].text}
           </div>
@@ -174,24 +174,83 @@ const LoveCheckForm = () => {
               </div>
             ))}
           </div>
-        </>
+        </div>
       ) : (
-        <div className="result">
-          <div className="character-image">
-            <img 
-              src={typeImages[getPersonalityTypeKey(score)]} 
-              alt={getPersonalityType(score)}
-              style={{ width: '150px', height: '150px', borderRadius: '50%', marginBottom: '20px' }}
-            />
+        <div style={{
+          width: '100%',
+          minHeight: '100vh',
+          padding: '20px',
+          fontFamily: 'Arial, sans-serif',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center'
+        }}>
+          <div style={{
+            maxWidth: '800px',
+            textAlign: 'center'
+          }}>
+            <h2 style={{ fontSize: '2rem', color: '#5b9aa0', marginBottom: '10px' }}>
+              診断完了！
+            </h2>
+            <p style={{ fontSize: '1.2rem', color: '#333', marginBottom: '30px' }}>
+              あなたのタイプは：「{getPersonalityType(score)}」です
+            </p>
+            
+            <div style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              justifyContent: 'center', 
+              gap: '40px',
+              margin: '20px 0',
+              flexWrap: 'wrap'
+            }}>
+              <div style={{ flex: '1', maxWidth: '400px', minWidth: '300px' }}>
+                <RadarChartComponent score={score} />
+              </div>
+              
+              <div style={{ 
+                flex: '0 0 200px',
+                display: 'flex',
+                justifyContent: 'center'
+              }}>
+                <img 
+                  src={typeImages[getPersonalityTypeKey(score)]} 
+                  alt={getPersonalityType(score)}
+                  style={{ 
+                    width: '200px', 
+                    height: '200px', 
+                    objectFit: 'cover',
+                    borderRadius: '50%',
+                    border: '4px solid #5b9aa0',
+                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
+                  }}
+                />
+              </div>
+            </div>
+            
+            <button 
+              onClick={resetQuiz}
+              style={{
+                padding: '12px 24px',
+                fontSize: '16px',
+                backgroundColor: '#5b9aa0',
+                color: 'white',
+                border: 'none',
+                borderRadius: '25px',
+                cursor: 'pointer',
+                transition: 'background-color 0.3s ease',
+                marginTop: '20px'
+              }}
+              onMouseEnter={(e) => e.target.style.backgroundColor = '#4a8389'}
+              onMouseLeave={(e) => e.target.style.backgroundColor = '#5b9aa0'}
+            >
+              もう一度診断する
+            </button>
           </div>
-          <h2>診断完了！</h2>
-          <p>あなたのタイプは：「{getPersonalityType(score)}」です</p>
-          {/* レーダーチャートを表示 */}
-          <RadarChartComponent score={score} />
-          <button onClick={resetQuiz}>もう一度診断する</button>
         </div>
       )}
-    </div>
+    </>
   );
 };
 
