@@ -2,76 +2,75 @@ import React, { useState } from "react";
 import "./LoveCheckForm.css";
 import RadarChartComponent from './components/RadarChartComponent';
 
-
 const questions = [
   {
     text: "質問1.会う頻度",
-    options: ["毎日", "週3", "週1", "月1", "気分", "未定"],
+    options: ["毎日", "週3回", "週1回", "月1回", "気分次第", "未定"],
     scores: [
       { passion: 2 }, { passion: 1 }, { cool: 1 }, { cool: 2 }, { independent: 1 }, { independent: 2 }
     ]
   },
   {
-    text: "質問2.返信速度",
-    options: ["即レス", "30分", "1時間", "半日", "1日", "気が向けば"],
+    text: "質問2.連絡の返信速度",
+    options: ["即レス", "30分以内", "1時間以内", "半日以内", "1日以内", "気が向いた時"],
     scores: [
       { empathy: 2 }, { empathy: 1 }, { cool: 1 }, { cool: 2 }, { independent: 1 }, { independent: 2 }
     ]
   },
   {
-    text: "質問3.主導権",
-    options: ["全部任せたい", "多めに任せたい", "半々", "自分が多め", "自分が全部", "その時次第"],
+    text: "質問3.関係の主導権",
+    options: ["相手に任せる", "相手主導", "対等", "自分主導", "自分が決める", "状況次第"],
     scores: [
       { dependent: 2 }, { dependent: 1 }, {}, { independent: 1 }, { independent: 2 }, { cool: 1 }
     ]
   },
   {
-    text: "質問4.ケンカの後",
-    options: ["即謝る", "すぐ仲直り", "距離とる", "しばらく無視", "記憶消す", "そもそも怒らない"],
+    text: "質問4.記念日の重要度",
+    options: ["絶対忘れない", "覚えてる", "普通", "あまり気にしない", "重要視しない", "そもそも苦手"],
     scores: [
-      { empathy: 2 }, { empathy: 1 }, { cool: 1 }, { cool: 2 }, { passion: 1 }, { independent: 1 }
+      { empathy: 2 }, { empathy: 1 }, { cool: 1 }, { cool: 2 }, { independent: 1 }, { independent: 2 }
     ]
   },
   {
     text: "質問5.理想のデート",
-    options: ["遊園地", "カフェ", "自然", "旅行", "家", "映画"],
+    options: ["テーマパーク", "カフェ巡り", "自然散策", "旅行", "お家時間", "映画鑑賞"],
     scores: [
       { passion: 2 }, { empathy: 1 }, { cool: 1 }, { passion: 1 }, { independent: 1 }, { cool: 1 }
     ]
   },
   {
-    text: "質問6.愛情表現",
-    options: ["言葉が重要", "行動で示す", "表情で伝える", "恥ずかしい", "いらない", "時々する"],
+    text: "質問6.愛情表現の方法",
+    options: ["言葉で伝える", "行動で示す", "表情・態度", "プレゼント", "スキンシップ", "特に表現しない"],
     scores: [
-      { empathy: 2 }, { passion: 2 }, { empathy: 1 }, { cool: 1 }, { independent: 2 }, { cool: 1 }
+      { empathy: 2 }, { passion: 2 }, { empathy: 1 }, { dependent: 1 }, { passion: 1 }, { independent: 2 }
     ]
   },
   {
-    text: "質問7.浮気の境界線",
-    options: ["連絡でアウト", "食事もダメ", "手を繋いだら", "キスから", "体の関係", "定義しない"],
+    text: "質問7.束縛について",
+    options: ["お互い束縛したい", "程よく束縛", "最低限のルール", "自由が大事", "完全に自由", "束縛の概念がない"],
     scores: [
-      { dependent: 2 }, { dependent: 1 }, { empathy: 1 }, { passion: 1 }, { cool: 2 }, { independent: 2 }
+      { dependent: 2 }, { dependent: 1 }, { empathy: 1 }, { independent: 1 }, { independent: 2 }, { cool: 2 }
     ]
   },
   {
-    text: "質問8.連絡頻度",
-    options: ["1日10回", "5回", "2回", "1回", "気分", "気づいたら"],
+    text: "質問8.相手の友達との関係",
+    options: ["仲良くしたい", "適度に関わる", "挨拶程度", "特に関わらない", "会いたくない", "どうでもいい"],
     scores: [
-      { empathy: 2 }, { empathy: 1 }, {}, { cool: 1 }, { independent: 1 }, { independent: 2 }
+      { empathy: 2 }, { empathy: 1 }, { cool: 1 }, { independent: 1 }, { dependent: 1 }, { independent: 2 }
     ]
   },
   {
-    text: "質問9.価値観の違い",
-    options: ["合わせる", "話し合う", "我慢する", "無視する", "すぐ別れる", "放置"],
+    text: "質問9.価値観の違いが生じた時",
+    options: ["相手に合わせる", "話し合って解決", "時間をかけて理解", "お互い尊重", "自分を貫く", "気にしない"],
     scores: [
-      { empathy: 2 }, { cool: 1 }, { dependent: 1 }, { cool: 2 }, { independent: 2 }, { independent: 1 }
+      { dependent: 2 }, { empathy: 2 }, { empathy: 1 }, { cool: 1 }, { independent: 2 }, { independent: 1 }
     ]
   },
   {
-    text: "質問10.嫉妬した時",
-    options: ["我慢", "言う", "泣く", "怒る", "無視", "黙る"],
+    text: "質問10.将来への考え方",
+    options: ["一緒に計画したい", "話し合いたい", "なんとなく考える", "自然に任せる", "今を大切にする", "特に考えない"],
     scores: [
-      { cool: 2 }, { empathy: 2 }, { dependent: 1 }, { passion: 2 }, { cool: 1 }, { independent: 1 }
+      { dependent: 2 }, { empathy: 2 }, { cool: 1 }, { independent: 1 }, { passion: 1 }, { independent: 2 }
     ]
   }
 ];
@@ -166,7 +165,6 @@ const LoveCheckForm = () => {
           <p>あなたのタイプは：「{getPersonalityType(score)}」です</p>
           {/* レーダーチャートを表示 */}
           <RadarChartComponent score={score} />
-
           <button onClick={resetQuiz}>もう一度診断する</button>
         </div>
       )}
