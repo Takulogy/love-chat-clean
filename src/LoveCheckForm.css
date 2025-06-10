@@ -1,91 +1,122 @@
-/* 結果画面用のスタイル */
-.result-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
-.result-header {
-    text-align: center;
-    margin-bottom: 30px;
-}
-
-.result-header h2 {
-    font-size: 2rem;
-    color: #5b9aa0;
-    margin-bottom: 10px;
-}
-
-.result-header p {
-    font-size: 1.2rem;
-    color: #333;
-}
-
-.result-content {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 40px;
+.form-container {
+    position: relative;
     width: 100%;
-    margin-bottom: 30px;
-}
-
-.chart-section {
-    flex: 1;
-    max-width: 400px;
-}
-
-.character-section {
-    flex: 0 0 200px;
+    height: 80vh;
     display: flex;
     justify-content: center;
     align-items: center;
+    font-family: Arial, sans-serif;
 }
 
-.character-image {
+.center-circle {
+    position: absolute;
     width: 200px;
     height: 200px;
-    object-fit: cover;
-    border-radius: 50%;
-    border: 4px solid #5b9aa0;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.result-footer {
-    text-align: center;
-}
-
-.restart-button {
-    padding: 12px 24px;
-    font-size: 16px;
     background-color: #5b9aa0;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     color: white;
-    border: none;
-    border-radius: 25px;
+    font-weight: bold;
+    font-size: 16px;
+    z-index: 1;
+    text-align: center;
+    padding: 20px;
+    box-sizing: border-box;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.options-container {
+    position: relative;
+    width: 400px;
+    height: 400px;
+}
+
+.option-circle {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    background-color: #a0c8d0;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    color: black;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: all 0.3s ease;
+    text-align: center;
+    font-size: 12px;
+    padding: 5px;
+    box-sizing: border-box;
 }
 
-.restart-button:hover {
-    background-color: #4a8389;
+.option-circle:hover {
+    background-color: #4a90e2;
+    color: white;
 }
 
-/* レスポンシブ対応 */
-@media (max-width: 768px) {
-    .result-content {
-        flex-direction: column;
-        gap: 20px;
+.option-circle.selected {
+    background-color: #4a90e2;
+    color: white;
+}
+
+.option-circle.gathering {
+    animation: gatherToCenter 1.5s ease-in-out forwards;
+}
+
+
+@keyframes gatherToCenter {
+    0% {
+        opacity: 1;
     }
-    
-    .character-section {
-        flex: none;
+    100% {
+        top: calc(50% - 40px) !important;
+        left: calc(50% - 40px) !important;
+        right: auto !important;
+        bottom: auto !important;
+        transform: scale(0);
+        opacity: 0;
     }
-    
-    .character-image {
-        width: 150px;
-        height: 150px;
-    }
+}
+
+/* 各選択肢の位置 */
+.option-0 { top: 0; left: 50%; transform: translateX(-50%); }
+.option-1 { top: 25%; right: 0; transform: translateY(-50%); }
+.option-2 { bottom: 25%; right: 0; transform: translateY(50%); }
+.option-3 { bottom: 0; left: 50%; transform: translateX(-50%); }
+.option-4 { bottom: 25%; left: 0; transform: translateY(50%); }
+.option-5 { top: 25%; left: 0; transform: translateY(-50%); }
+
+/* hover・selected 状態のスケーリング */
+.option-0:hover,
+.option-0.selected { transform: translateX(-50%) scale(1.1); }
+
+.option-1:hover,
+.option-1.selected { transform: translateY(-50%) scale(1.1); }
+
+.option-2:hover,
+.option-2.selected { transform: translateY(50%) scale(1.1); }
+
+.option-3:hover,
+.option-3.selected { transform: translateX(-50%) scale(1.1); }
+
+.option-4:hover,
+.option-4.selected { transform: translateY(50%) scale(1.1); }
+
+.option-5:hover,
+.option-5.selected { transform: translateY(-50%) scale(1.1); }
+
+/* フェードイン・アウト演出 */
+.options-container.fade-out {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.options-container.fade-in {
+    opacity: 1;
+    transition: opacity 0.3s ease;
 }
