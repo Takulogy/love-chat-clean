@@ -2,6 +2,13 @@ import React, { useState } from "react";
 import "./LoveCheckForm.css";
 import RadarChartComponent from './components/RadarChartComponent';
 
+// キャラクター画像のインポート
+import passionImg from './assets/character-images/passion.png';
+import coolImg from './assets/character-images/cool.png';
+import independentImg from './assets/character-images/independent.png';
+import dependentImg from './assets/character-images/dependent.png';
+import empathyImg from './assets/character-images/empathy.png';
+
 const questions = [
   {
     text: "質問1.会う頻度",
@@ -74,6 +81,15 @@ const questions = [
     ]
   }
 ];
+
+// 画像マッピング
+const typeImages = {
+  passion: passionImg,
+  cool: coolImg,
+  independent: independentImg,
+  dependent: dependentImg,
+  empathy: empathyImg
+};
 
 const LoveCheckForm = () => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -161,6 +177,13 @@ const LoveCheckForm = () => {
         </>
       ) : (
         <div className="result">
+          <div className="character-image">
+            <img 
+              src={typeImages[getPersonalityTypeKey(score)]} 
+              alt={getPersonalityType(score)}
+              style={{ width: '150px', height: '150px', borderRadius: '50%', marginBottom: '20px' }}
+            />
+          </div>
           <h2>診断完了！</h2>
           <p>あなたのタイプは：「{getPersonalityType(score)}」です</p>
           {/* レーダーチャートを表示 */}
@@ -169,6 +192,13 @@ const LoveCheckForm = () => {
         </div>
       )}
     </div>
+  );
+};
+
+// スコアからタイプキーを判定
+const getPersonalityTypeKey = (score) => {
+  return Object.keys(score).reduce((a, b) =>
+    score[a] > score[b] ? a : b
   );
 };
 
