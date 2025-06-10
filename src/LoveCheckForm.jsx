@@ -177,58 +177,18 @@ const LoveCheckForm = () => {
         </>
       ) : (
         <div className="result">
+          <div className="character-image">
+            <img 
+              src={typeImages[getPersonalityTypeKey(score)]} 
+              alt={getPersonalityType(score)}
+              style={{ width: '150px', height: '150px', borderRadius: '50%', marginBottom: '20px' }}
+            />
+          </div>
           <h2>診断完了！</h2>
           <p>あなたのタイプは：「{getPersonalityType(score)}」です</p>
-          
-          <div style={{ 
-            display: 'flex', 
-            alignItems: 'center', 
-            justifyContent: 'center', 
-            gap: '40px',
-            margin: '20px 0',
-            flexWrap: 'wrap'
-          }}>
-            <div style={{ flex: '1', maxWidth: '400px', minWidth: '300px' }}>
-              <RadarChartComponent score={score} />
-            </div>
-            
-            <div style={{ 
-              flex: '0 0 200px',
-              display: 'flex',
-              justifyContent: 'center'
-            }}>
-              <img 
-                src={typeImages[getPersonalityTypeKey(score)]} 
-                alt={getPersonalityType(score)}
-                style={{ 
-                  width: '200px', 
-                  height: '200px', 
-                  objectFit: 'cover',
-                  borderRadius: '50%',
-                  border: '4px solid #5b9aa0',
-                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
-                }}
-              />
-            </div>
-          </div>
-          
-          <button 
-            onClick={resetQuiz}
-            style={{
-              padding: '12px 24px',
-              fontSize: '16px',
-              backgroundColor: '#5b9aa0',
-              color: 'white',
-              border: 'none',
-              borderRadius: '25px',
-              cursor: 'pointer',
-              transition: 'background-color 0.3s ease'
-            }}
-            onMouseEnter={(e) => e.target.style.backgroundColor = '#4a8389'}
-            onMouseLeave={(e) => e.target.style.backgroundColor = '#5b9aa0'}
-          >
-            もう一度診断する
-          </button>
+          {/* レーダーチャートを表示 */}
+          <RadarChartComponent score={score} />
+          <button onClick={resetQuiz}>もう一度診断する</button>
         </div>
       )}
     </div>
